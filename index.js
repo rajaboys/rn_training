@@ -1,9 +1,18 @@
-import Xyz from './app';
+import React from 'react';
+import ReactDom from 'react-dom';
 
+// Component
+const App = () => (
+  <>
+    <h1
+      style={{
+        backgroundColor: 'red',
+        color: 'white',
+      }}>
+      Hello From App
+    </h1>
+    <input />
+  </>
+);
 
-import Abc, { firstName, lastName } from './app';
-
-console.log(App.name);
-
-console.log(firstName);
-
+ReactDom.render(<App />, document.getElementById('root'));
