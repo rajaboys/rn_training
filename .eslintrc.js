@@ -21,5 +21,6 @@ module.exports = {
       { extensions: ['.js', '.jsx'] },
     ],
     'react/jsx-closing-bracket-location': 0,
+    'react/state-in-constructor': 0,
   },
 };

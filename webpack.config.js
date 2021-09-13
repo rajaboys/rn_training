@@ -8,12 +8,22 @@ module.exports = {
     filename: 'main.js',
   },
   mode: 'development',
+  resolve: {
+    alias: {
+      'react-dom$': 'react-dom/profiling',
+    },
+  },
   module: {
     rules: [
       {
-        test: /\.m?js$/,
+        test: /\.js$/i,
         exclude: /node_modules/,
         use: 'babel-loader',
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        exclude: /node_modules/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },
