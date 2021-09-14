@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    & h1 {
+        padding: 1rem;
+    }
+    & .todo-form {
+        margin: 1rem;
+    }
+    
+    & .todo-list-wrapper {
+        width: 100%;
+        flex: 1;
+        & .todo-list {
+            margin: 1rem;
+            display: flex;
+            align-items: center;
+            & span {
+                flex: 1;
+                padding: 0 10px;
+            }
+    
+        }
+    }
+
+    & .todo-fliter {
+        width: 100%;
+        display: flex;
+
+        & button {
+            flex: 1
+        }
+    }
+
+    
+}
+
+
