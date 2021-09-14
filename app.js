@@ -10,39 +10,101 @@ class App extends PureComponent {
   state = {
     todoList: [],
     filterType: 'all',
+    hasError: false,
   };
 
-  addTodo = () => {
-    this.setState(
-      ({ todoList }) => ({
-        todoList: [
-          ...todoList,
-          {
-            id: new Date().valueOf(),
+  componentDidMount = async () => {
+    try {
+      const res = await fetch(
+        'http://localhost:3000/todoList',
+      );
+      const json = await res.json();
+      console.log('res', res);
+      console.log('json', json);
+      this.setState({
+        todoList: json,
+      });
+    } catch (error) {
+      this.setState({
+        hasError: true,
+      });
+      console.log(error);
+    }
+  };
+
+  addTodo = async () => {
+    try {
+      const res = await fetch(
+        'http://localhost:3000/todoList',
+        {
+          method: 'POST',
+          body: JSON.stringify({
             text: this.todoInputRef.current.value,
             isDone: false,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
           },
-        ],
-        filterType: 'all',
-      }),
-      () => {
-        this.todoInputRef.current.value = '';
-      },
-    );
+        },
+      );
+
+      const json = await res.json();
+
+      this.setState(
+        ({ todoList }) => ({
+          todoList: [...todoList, json],
+          filterType: 'all',
+        }),
+        () => {
+          this.todoInputRef.current.value = '';
+        },
+      );
+    } catch (error) {
+      this.setState({
+        hasError: true,
+      });
+    }
   };
 
-  toggleCompleteTodo = item => {
-    const { todoList } = this.state;
+  toggleCompleteTodo = async item => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/todoList/${item.id}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify({
+            ...item,
+            isDone: !item.isDone,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+        },
+      );
 
-    const index = todoList.findIndex(x => x.id === item.id);
+      const json = await res.json();
 
-    this.setState(state => ({
-      todoList: [
-        ...state.todoList.slice(0, index),
-        { ...item, isDone: !item.isDone },
-        ...state.todoList.slice(index + 1),
-      ],
-    }));
+      const { todoList } = this.state;
+
+      const index = todoList.findIndex(
+        x => x.id === item.id,
+      );
+
+      this.setState(state => ({
+        todoList: [
+          ...state.todoList.slice(0, index),
+          json,
+          ...state.todoList.slice(index + 1),
+        ],
+      }));
+    } catch (error) {
+      console.log(error);
+      this.setState({
+        hasError: true,
+      });
+    }
   };
 
   deleteTodo = item => {
@@ -58,7 +120,15 @@ class App extends PureComponent {
   };
 
   render() {
-    const { todoList, filterType } = this.state;
+    const { todoList, filterType, hasError } = this.state;
+
+    if (hasError) {
+      return (
+        <h1>
+          Server is down. Please try after sometime...
+        </h1>
+      );
+    }
 
     return (
       <div className="container">

@@ -7,8 +7,13 @@
     },
     {
       "text": "Learn react",
-      "isDone": false,
+      "isDone": true,
       "id": 2
+    },
+    {
+      "text": "learn react native",
+      "isDone": false,
+      "id": 3
     }
   ]
 }
