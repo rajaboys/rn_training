@@ -16,7 +16,7 @@ class App extends PureComponent {
   componentDidMount = async () => {
     try {
       const res = await fetch(
-        'http://localhost:3000/todoList',
+        'https://e43c-117-99-103-96.ngrok.io/todoList',
       );
       const json = await res.json();
       console.log('res', res);
@@ -35,7 +35,7 @@ class App extends PureComponent {
   addTodo = async () => {
     try {
       const res = await fetch(
-        'http://localhost:3000/todoList',
+        'https://e43c-117-99-103-96.ngrok.io/todoList',
         {
           method: 'POST',
           body: JSON.stringify({
@@ -70,7 +70,7 @@ class App extends PureComponent {
   toggleCompleteTodo = async item => {
     try {
       const res = await fetch(
-        `http://localhost:3000/todoList/${item.id}`,
+        `https://e43c-117-99-103-96.ngrok.io/todoList/${item.id}`,
         {
           method: 'PUT',
           body: JSON.stringify({
