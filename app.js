@@ -1,14 +1,16 @@
 import React, { PureComponent, createRef } from 'react';
 import './app.scss';
+import TodoFilter from './todo/todoFilter';
+import TodoForm from './todo/todoForm';
+import TodoList from './todo/todoList';
 
 class App extends PureComponent {
   todoInputRef = createRef(null);
 
   state = {
     todoList: [],
+    filterType: 'all',
   };
-
-  componentDidMount() {}
 
   addTodo = () => {
     this.setState(
@@ -21,6 +23,7 @@ class App extends PureComponent {
             isDone: false,
           },
         ],
+        filterType: 'all',
       }),
       () => {
         this.todoInputRef.current.value = '';
@@ -42,47 +45,38 @@ class App extends PureComponent {
     }));
   };
 
+  deleteTodo = item => {
+    this.setState(({ todoList }) => ({
+      todoList: todoList.filter(x => x.id !== item.id),
+    }));
+  };
+
+  filterTodo = event => {
+    this.setState({
+      filterType: event.target.name,
+    });
+  };
+
   render() {
-    const { todoList } = this.state;
-    console.log('render method');
+    const { todoList, filterType } = this.state;
 
     return (
       <div className="container">
         <h1>Todo App</h1>
-        <div className="todo-form">
-          <input type="text" ref={this.todoInputRef} />
-          <button type="button" onClick={this.addTodo}>
-            Add Todo
-          </button>
-        </div>
-        <div className="todo-list-wrapper">
-          {todoList.map(item => (
-            <div key={item.id} className="todo-list">
-              <input
-                type="checkbox"
-                name="isDone"
-                checked={item.isDone}
-                onChange={() =>
-                  this.toggleCompleteTodo(item)
-                }
-              />
-              <span
-                style={{
-                  textDecoration: item.isDone
-                    ? 'line-through'
-                    : 'none',
-                }}>
-                {item.text}
-              </span>
-              <button type="button">Delete</button>
-            </div>
-          ))}
-        </div>
-        <div className="todo-fliter">
-          <button type="button">All</button>
-          <button type="button">Pending</button>
-          <button type="button">Completed</button>
-        </div>
+        <TodoForm
+          ref={this.todoInputRef}
+          addTodo={this.addTodo}
+        />
+        <TodoList
+          todoList={todoList}
+          filterType={filterType}
+          toggleCompleteTodo={this.toggleCompleteTodo}
+          deleteTodo={this.deleteTodo}
+        />
+        <TodoFilter
+          filterType={filterType}
+          filterTodo={this.filterTodo}
+        />
       </div>
     );
   }
